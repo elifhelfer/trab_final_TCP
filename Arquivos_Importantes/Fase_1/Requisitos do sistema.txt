@@ -1,0 +1,27 @@
+Requisitos do sistema
+
+Funcionais:
+- Escrever caracteres em uma caixa de texto;
+- Botão para traduzir o texto para música;
+- Os textos já traduzidos ficam destacados em "caixas";
+	- Aparecem todas as músicas já traduzidas;
+	- Aparece o texto inserido e a sua respectiva tradução;
+	- Possível deletar músicas traduzidas;
+- Ao clicar na música já salva é possível tocar ela;
+	- A música vai possuir um botão "toggle" que permite toca-lá em loop;
+	- Como é possível ter várias músicas salvas, é possível tocar mais do que uma de uma vez
+- "Botão de arrastar" para aumentar e diminuir o volume;
+- Caixa para definir um BPM;
+	- Possível inserir e apagar;
+
+Não funcionais:
+- O sistema deve estar operacional;
+- Interface simples e intuitiva para o usuário (idea: arte parecida com um jogo flash dos anos 2000);
+- O programa deve ser responsivo aos inputs do usuário;
+- O som produzido pelo software deve estar claro e compreensível ao ouvido humano;
+
+- Ao clicar nas caixas de música, elas devem ficar destacadas;
+- Um penguim presente no canto superior direito irá dançar sempre que uma música estiver dançando;
+- O nome do penguim deve ser Glub Linus (não opcional);
+
+

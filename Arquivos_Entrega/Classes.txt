@@ -1,9 +1,9 @@
 Classes:
-- Class Nota
+- Class Note
   Atributos:
-	- Nota NotaAtual
+	- Note CurrentNote
 	- int MIDI
-	- Oitava OitavaAtual
+	- Octave CurrentOctave
 
 
 - Class BPM
@@ -18,27 +18,44 @@ Classes:
   Atributos:
 	- float Volume
   Métodos:
-	- DobraVolume()
+	- DoubleVolume()
 	- SetVolume(float valor)
 	- GetVolume()
 
 
-- Class Musica
+- Class Music
   Atributos:
-	- Volume VolumeMusica
-	- Nota Notas[]
-	- bool Tocando
+	- Volume MusicVolume
+	- Note Notes[]
+	- bool IsPlaying
   Método:
-	- CriarMusica(String inputUsuario)
+	- CreateMusic(String UserInput)
 
 
-- Class Banda // Classe que contém todas as partituras que foram salvas
+- Class Band // Classe que contém todas as partituras que foram salvas
   Atributos:
-	- Musica Musicas[]
-	- Volume VolumeGeral
-	- BPM BPMGeral
+	- Music Musics[]
+	- Volume GeneralVolume
+	- BPM GeneralBPM
   Métodos:
-	- SelecionMusica(Musica MusicaSelecionada)
-	- DeletaMusica(Musica MusicaSelecionada)
-	- ToggleLoop(Musica MusicaSelecionada)
-	- TocaMusica(Musica MusicaSelecionada)
+	- SelectMusic(Music SelectedMusic)
+	- DeleteMusic(Music SelectedMusic)
+	- ToggleLoop(Music SelectedMusic)
+	- PlayMusica(Music SelectedMusic)
+
+
+- Class InputMusic // Classe que lê artigo de texto e armazena a música lida
+Atributos:
+	- path PathToMusic
+	- String MusicName
+	- String MusicString
+Métodos: 
+	- ReadFile(path PathToMusic)
+
+
+- Class SaveMidi // Classe que salva midi em caminho especificado
+Atributos:
+	- path PathToMusic
+	- String MusicName
+Métodos:
+	- SaveMidi(PathToMusic)

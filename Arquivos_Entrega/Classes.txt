@@ -1,42 +1,23 @@
 Classes:
 
-- Class BPM
+- Class Tocador // Classe que contém todas as partituras que foram salvas
   Atributos:
-	- int BPM
+	- Score Musica
+	- isPlaying
+	- IsLoop
   Métodos:
-	- GetBPM()
-	- SetBPM(int valor)
+	- PlayOnce()
+	- PlayLoop()
+	- DeleteMusic()
+	- isNull()
+	- getMusic()
 
 
-- Class Volume
+- Class Reportoir // Classe que contém todas as músicas geradas pelo MusicParser
   Atributos:
-	- float Volume
-  Métodos:
-	- DoubleVolume()
-	- SetVolume(float valor)
-	- GetVolume()
-
-
-- Class Music
-  Atributos:
-	- Volume MusicVolume
-	- Note Notes[]
-	- bool IsPlaying
-  Método:
-	- CreateMusic(String UserInput)
-
-
-- Class Band // Classe que contém todas as partituras que foram salvas
-  Atributos:
-	- Music Musics[]
-	- Volume GeneralVolume
-	- BPM GeneralBPM
-  Métodos:
-	- SelectMusic(Music SelectedMusic)
-	- DeleteMusic(Music SelectedMusic)
-	- ToggleLoop(Music SelectedMusic)
-	- PlayMusica(Music SelectedMusic)
-
+	- Tocador tocadores[]
+  Métods:
+	- AddNewSong(Score newSong)
 
 - Class ReadTextFile // Classe que lê artigo de texto e armazena a música lida
 Atributos:

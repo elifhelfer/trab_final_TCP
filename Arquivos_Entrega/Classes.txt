@@ -1,10 +1,4 @@
 Classes:
-- Class Note
-  Atributos:
-	- Note CurrentNote
-	- int MIDI
-	- Octave CurrentOctave
-
 
 - Class BPM
   Atributos:
@@ -44,9 +38,9 @@ Classes:
 	- PlayMusica(Music SelectedMusic)
 
 
-- Class InputMusic // Classe que lê artigo de texto e armazena a música lida
+- Class ReadTextFile // Classe que lê artigo de texto e armazena a música lida
 Atributos:
-	- path PathToMusic
+	- path PathToFile
 	- String MusicName
 	- String MusicString
 Métodos: 
@@ -59,3 +53,9 @@ Atributos:
 	- String MusicName
 Métodos:
 	- SaveMidi(PathToMusic)
+
+- Class MusicParser // Classe que recebe string e gera música codificada
+Atributos:
+	- 
+Métodos: 
+	- 

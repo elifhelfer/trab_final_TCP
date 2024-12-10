@@ -7,11 +7,8 @@ public class MidiValues {
     // MIDI Commands
     public static final int NOTE_OFF = 128;         // 0x80
     public static final int NOTE_ON = 144;         // 0x90
-    public static final int POLYPHONIC_PRESSURE = 160; // 0xA0
     public static final int CONTROL_CHANGE = 176;  // 0xB0
     public static final int PROGRAM_CHANGE = 192;  // 0xC0
-    public static final int CHANNEL_PRESSURE = 208; // 0xD0
-    public static final int PITCH_BEND = 224;
 
     // MIDI values for natural notes (A to G) in octave 4
     private static final int A = 69;
@@ -28,7 +25,6 @@ public class MidiValues {
     private static final int VIOLIN = 40;     // Violin
     private static final int FLUTE = 73;      // Flute
     private static final int TRUMPET = 56;    // Trumpet
-    private static final int DRUMS = 118;     // Synth Drum
     private static final int SAXOPHONE = 65;  // Alto Saxophone
     private static final int CELLO = 42;      // Cello
     private static final int CLARINET = 71;   // Clarinet
@@ -37,7 +33,7 @@ public class MidiValues {
     // Array of all instrument values for random selection
     private static final int[] INSTRUMENTS = {
             PIANO, GUITAR, VIOLIN, FLUTE, TRUMPET,
-            DRUMS, SAXOPHONE, CELLO, CLARINET, ORGAN
+            SAXOPHONE, CELLO, CLARINET, ORGAN
     };
 
     // Method to get the MIDI value of a specific instrument
@@ -82,7 +78,6 @@ public class MidiValues {
             case "VIOLIN" -> VIOLIN;
             case "FLUTE" -> FLUTE;
             case "TRUMPET" -> TRUMPET;
-            case "DRUMS" -> DRUMS;
             case "SAXOPHONE" -> SAXOPHONE;
             case "CELLO" -> CELLO;
             case "CLARINET" -> CLARINET;
@@ -106,7 +101,6 @@ public class MidiValues {
         System.out.println("Random Note: " + MidiValues.getNoteValue("", true));
 
         // Test random Instrument
-        System.out.println("Drums: " + getInstrumentValue("DRUMS", false));
         System.out.println("Guitar: " + getInstrumentValue("GUITAR", false));
 
         // Test random instrument

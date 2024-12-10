@@ -7,9 +7,9 @@ public class TESTE {
     public static void main(String[] args) {
         //Scanner in = new Scanner(System.in);
 
-        System.out.println("Enter the input text to play (e.g., R+ABCDEFG BPM+): ");
+        //System.out.println("Enter the input text to play (e.g., R+ABCDEFG BPM+): ");
         //String inputText = in.nextLine();
-        String inputText = "a-aaa++aa+aaa";
+        String inputText = "aR+aR-aBPM+aR+aR-aBPM+aR+aR-aR+aR-a";
         MusicParser parser = new MusicParser();
         ArrayList<MidiEvent> midiEvents = parser.listMidiEvents(inputText);
 

@@ -23,14 +23,16 @@ public class MusicParser {
 
         boolean wasNote = false;
         int currentTick = 4;
+        int midiValue = 0;
         int strIndex = 0;
+        int current_octave = 0;
+
         while (strIndex < inputText.length()) {
             try {
                 int caseType = findCase(inputText, strIndex, wasNote);
-                int midiValue = 0;
                 String note;
                 switch (caseType) {
-                    case 0: // Increase BPM
+                    case 0: // Increase BPM+
                         midiList.add(changeBpm(currentTick, BPM_INCREASE, currentBPM));
                         currentBPM += BPM_INCREASE;
                         wasNote = false;
@@ -38,29 +40,24 @@ public class MusicParser {
                         break;
 
                     case 1: // Up an octave
-                        note = inputText.substring(strIndex, strIndex + 1).toUpperCase();
-                        midiValue = MidiValues.getNoteValue(note, false); // Assuming MidiValues class
-                        if (midiValue + OCTAVE_OFFSET <= HIGHEST_NOTE)
-                            midiValue += OCTAVE_OFFSET;
-                        addNoteEvent(midiList, midiValue, CHANNEL, DEFAULT_VELOCITY, currentTick);
-                        currentTick += DEFAULT_TICK; // Increment for the next event
-                        wasNote = true;
+                        // TODO check if there was last note (edge case for first note)
+                        if (midiValue + (current_octave + 1)*(OCTAVE_OFFSET) <= HIGHEST_NOTE) {
+                            current_octave++;
+                        }
                         strIndex += "R+".length();
                         break;
 
                     case 2: // Down an octave
-                        note = inputText.substring(strIndex, strIndex + 1).toUpperCase();
-                        midiValue = MidiValues.getNoteValue(note, false); // Assuming MidiValues class
-                        if (midiValue - OCTAVE_OFFSET >= 0)
-                            midiValue -= OCTAVE_OFFSET;
-                        addNoteEvent(midiList, midiValue, CHANNEL, DEFAULT_VELOCITY, currentTick);
-                        wasNote = true;
+                        System.out.println("inside case 2");
+                        // TODO check if there was last note (edge case for first note)
+                        if (midiValue - (current_octave - 1)*(OCTAVE_OFFSET) <= HIGHEST_NOTE)
+                            current_octave--;
                         strIndex += "R-".length();
                         break;
 
                     case 3: // Play a note
                         note = inputText.substring(strIndex, strIndex + 1).toUpperCase();
-                        midiValue = MidiValues.getNoteValue(note, false); // Assuming MidiValues class
+                        midiValue = current_octave*OCTAVE_OFFSET + MidiValues.getNoteValue(note, false); // Assuming MidiValues class
                         addNoteEvent(midiList, midiValue, CHANNEL, DEFAULT_VELOCITY, currentTick);
                         currentTick += DEFAULT_TICK; // Increment for the next event
                         wasNote = true;

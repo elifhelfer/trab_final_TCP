@@ -15,7 +15,6 @@ public class MusicTester {
 
     public void setUpPlayer(int numOfNotes)
     {
-
         try {
 
             // A static method of MidiSystem that returns
@@ -34,7 +33,7 @@ public class MusicTester {
             Track track = sequence.createTrack();
 
             // Adding some events to the track
-            for (int i = 5; i < (4 * numOfNotes) + 5; i += 4)
+            for (int i = 0; i < (4 * numOfNotes); i += 4)
             {
 
                 // Add Note On event
@@ -48,7 +47,7 @@ public class MusicTester {
             sequencer.setSequence(sequence);
 
             // Specifies the beat rate in beats per minute.
-            sequencer.setTempoInBPM(60);
+            sequencer.setTempoInBPM(180);
 
             // Sequencer starts to play notes
             sequencer.start();

@@ -22,8 +22,9 @@ public class MusicTester {
             Sequencer sequencer = MidiSystem.getSequencer();
             sequencer.open();
 
-            // Creating a sequence.
-            Sequence sequence = new Sequence(Sequence.PPQ, 4);
+    // Creating a sequence.
+            Sequence sequence =
+
 
             // PPQ(Pulse per ticks) is used to specify timing
             // type and 4 is the timing resolution.

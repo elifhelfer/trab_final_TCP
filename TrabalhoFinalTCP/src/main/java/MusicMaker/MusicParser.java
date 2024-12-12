@@ -5,21 +5,16 @@ import java.util.*;
 
 public class MusicParser {
     // Module constants
-    private static final int OCTAVE_OFFSET = 12;
-    private static final int HIGHEST_NOTE = 127;
-    private static final int LOWEST_NOTE = 0;
-    private static final int DEFAULT_TICK = 4;
-    private static final int DEFAULT_VELOCITY = 100;
-    private static final int BPM_INCREASE = 80;
-    private static final int DEFAULT_BPM = 120;
-    private static final int DEFAULT_VOLUME = 30;
-    private static final int MAX_VOLUME = 127;
-    private static final int CHANNEL = 1;
+    int default_channel, default_bpm;
+    public MusicParser(int channel, int default_bpm) {
+        this.default_channel = channel;
+        this.default_bpm = default_bpm;
+    }
 
     public ArrayList<MidiEvent> listMidiEvents(String inputText) {
         ArrayList<MidiEvent> midiList = new ArrayList<>();
-        int currentBPM = DEFAULT_BPM;
-        int currentVolume = DEFAULT_VOLUME;
+        int currentBPM = default_bpm;
+        int currentVolume = MidiValues.DEFAULT_VOLUME;
 
         boolean wasNote = false;
         int currentTick = 4;
@@ -33,15 +28,15 @@ public class MusicParser {
                 String note;
                 switch (caseType) {
                     case 0: // Increase BPM+
-                        midiList.add(changeBpm(currentTick, BPM_INCREASE, currentBPM));
-                        currentBPM += BPM_INCREASE;
+                        midiList.add(changeBpm(currentTick, MidiValues.BPM_INCREASE, currentBPM));
+                        currentBPM += MidiValues.BPM_INCREASE;
                         wasNote = false;
                         strIndex += "BPM+".length();
                         break;
 
                     case 1: // Up an octave
                         // TODO check if there was last note (edge case for first note)
-                        if (midiValue + (current_octave + 1)*(OCTAVE_OFFSET) <= HIGHEST_NOTE) {
+                        if (midiValue + (current_octave + 1)*(MidiValues.OCTAVE_OFFSET) <= MidiValues.HIGHEST_NOTE) {
                             current_octave++;
                         }
                         strIndex += "R+".length();
@@ -50,39 +45,39 @@ public class MusicParser {
                     case 2: // Down an octave
                         System.out.println("inside case 2");
                         // TODO check if there was last note (edge case for first note)
-                        if (midiValue - (current_octave - 1)*(OCTAVE_OFFSET) <= HIGHEST_NOTE)
+                        if (midiValue - (current_octave - 1)*(MidiValues.OCTAVE_OFFSET) <= MidiValues.HIGHEST_NOTE)
                             current_octave--;
                         strIndex += "R-".length();
                         break;
 
                     case 3: // Play a note
                         note = inputText.substring(strIndex, strIndex + 1).toUpperCase();
-                        midiValue = current_octave*OCTAVE_OFFSET + MidiValues.getNoteValue(note, false); // Assuming MidiValues class
-                        addNoteEvent(midiList, midiValue, CHANNEL, DEFAULT_VELOCITY, currentTick);
-                        currentTick += DEFAULT_TICK; // Increment for the next event
+                        midiValue = current_octave*MidiValues.OCTAVE_OFFSET + MidiValues.getNoteValue(note, false); // Assuming MidiValues class
+                        addNoteEvent(midiList, midiValue, this.default_channel, MidiValues.DEFAULT_VELOCITY, currentTick);
+                        currentTick += MidiValues.DEFAULT_TICK; // Increment for the next event
                         wasNote = true;
                         strIndex++;
                         break;
 
                     case 4: // Play a random note
                         int randomNote = MidiValues.getNoteValue("", true); // Assuming MidiValues class
-                        addNoteEvent(midiList, randomNote, CHANNEL, DEFAULT_VELOCITY, currentTick);
-                        currentTick += DEFAULT_TICK;
+                        addNoteEvent(midiList, randomNote, this.default_channel, MidiValues.DEFAULT_VELOCITY, currentTick);
+                        currentTick += MidiValues.DEFAULT_TICK;
                         wasNote = true;
                         strIndex++;
                         break;
 
                     case 5: // Repeat last note
-                        addNoteEvent(midiList, midiValue, CHANNEL, DEFAULT_VELOCITY, currentTick);
-                        currentTick += DEFAULT_TICK;
+                        addNoteEvent(midiList, midiValue, this.default_channel, MidiValues.DEFAULT_VELOCITY, currentTick);
+                        currentTick += MidiValues.DEFAULT_TICK;
                         wasNote = true;
                         strIndex++;
                         break;
 
                     case 6: // Play Telephone sound
                         int telephoneNote = 81; // MIDI value for Telephone
-                        addNoteEvent(midiList, telephoneNote, 10, DEFAULT_VELOCITY, currentTick); // Channel 9
-                        currentTick += DEFAULT_TICK;
+                        addNoteEvent(midiList, telephoneNote, 10, MidiValues.DEFAULT_VELOCITY, currentTick); // Channel 9
+                        currentTick += MidiValues.DEFAULT_TICK;
                         strIndex++;
                         break;
 
@@ -94,25 +89,25 @@ public class MusicParser {
                         break;
 
                     case 8: // Double volume
-                        currentVolume = Math.min(currentVolume * 2, MAX_VOLUME);
-                        midiList.add(changeVolume(currentTick, CHANNEL, currentVolume, true));
+                        currentVolume = Math.min(currentVolume * 2, MidiValues.MAX_VOLUME);
+                        midiList.add(changeVolume(currentTick, this.default_channel, currentVolume, true));
                         strIndex++;
                         break;
 
                     case 9: // Default volume
-                        currentVolume = DEFAULT_VOLUME;
-                        midiList.add(changeVolume(currentTick, CHANNEL, currentVolume, false));
+                        currentVolume = MidiValues.DEFAULT_VOLUME;
+                        midiList.add(changeVolume(currentTick, this.default_channel, currentVolume, false));
                         strIndex++;
                         break;
 
                     case 10: // Add a pause
-                        currentTick += DEFAULT_TICK; // Skip ticks for a pause
+                        currentTick += MidiValues.DEFAULT_TICK; // Skip ticks for a pause
                         strIndex++;
                         break;
 
                     case 11: // Change instrument
                         int randomInstrument = MidiValues.getInstrumentValue("", true);
-                        midiList.add(changeInstrument(currentTick, randomInstrument));
+                        midiList.add(changeInstrument(currentTick, this.default_channel, randomInstrument));
                         strIndex++;
                         break;
 
@@ -184,7 +179,7 @@ public class MusicParser {
     }
 
     private MidiEvent changeVolume(long tick, int channel, int currentVolume, boolean doubleVolume) {
-        int newVolume = doubleVolume ? Math.min(currentVolume * 2, MAX_VOLUME) : currentVolume;
+        int newVolume = doubleVolume ? Math.min(currentVolume * 2, MidiValues.MAX_VOLUME) : currentVolume;
         MidiEvent event = null;
         try {
             ShortMessage volumeChange = new ShortMessage();
@@ -196,11 +191,11 @@ public class MusicParser {
         return event;
     }
 
-    private MidiEvent changeInstrument(long tick, int instrument) {
+    private MidiEvent changeInstrument(long tick, int channel ,int instrument) {
         MidiEvent event = null;
         try {
             ShortMessage programChange = new ShortMessage();
-            programChange.setMessage(MidiValues.PROGRAM_CHANGE, CHANNEL, instrument, 0); // 192 = Program Change
+            programChange.setMessage(MidiValues.PROGRAM_CHANGE, this.default_channel, instrument, 0); // 192 = Program Change
             event = new MidiEvent(programChange, tick);
         } catch (Exception ex) {
             // TODO implement

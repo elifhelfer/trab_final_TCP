@@ -10,6 +10,18 @@ public class MidiValues {
     public static final int CONTROL_CHANGE = 176;  // 0xB0
     public static final int PROGRAM_CHANGE = 192;  // 0xC0
 
+    // program constants
+    public static final int DEFAULT_TICK = 4;
+    public static final int DEFAULT_VELOCITY = 100;
+    public static final int OCTAVE_OFFSET = 12;
+    public static final int DEFAULT_BPM = 60;
+    public static final int BPM_INCREASE = 80;
+    public static final int LOWEST_NOTE = 0;
+    public static final int HIGHEST_NOTE = 127;
+    public static final int DEFAULT_VOLUME = 30;
+    public static final int MIN_VOLUME = 0;
+    public static final int MAX_VOLUME = 127;
+
     // MIDI values for natural notes (A to G) in octave 4
     private static final int A = 69;
     private static final int B = 71;

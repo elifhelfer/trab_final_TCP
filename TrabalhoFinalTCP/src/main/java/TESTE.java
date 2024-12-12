@@ -9,10 +9,10 @@ public class TESTE {
 
         //System.out.println("Enter the input text to play (e.g., R+ABCDEFG BPM+): ");
         //String inputText = in.nextLine();
-        String inputText = "o?oBPM+abcR+abcR+abcR-;abcBPM+abcoiu?";
+        String inputText = "ao?oBPM+abcR+abcR+abcR-;abcBPM+abcoiu?";
         String inputText2 = "";
-        MusicParser parser = new MusicParser(1);
-        MusicParser parser2 = new MusicParser(2);
+        MusicParser parser = new MusicParser(1,160);
+        MusicParser parser2 = new MusicParser(2,60);
         ArrayList<MidiEvent> midiEvents = parser.listMidiEvents(inputText);
         ArrayList<MidiEvent> midiEvents2 = parser2.listMidiEvents(inputText2);
 

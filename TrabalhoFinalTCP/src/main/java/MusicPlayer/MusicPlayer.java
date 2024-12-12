@@ -7,9 +7,25 @@ import java.util.*;
 
 import static java.lang.Thread.sleep;
 
-public class MusicPlayer {
+public class MusicPlayer implements Runnable{
+    private boolean isPlaying;
+    private Sequence song;
 
-    public static void PlayMusic(Sequence sequence){
+    public MusicPlayer(Sequence newSong){
+        this.song = newSong;
+        this.isPlaying = false;
+    }
+
+    public void startPlaying() {
+        isPlaying = true;
+        new Thread(this).start(); // Start the thread
+    }
+
+    public void stopPlaying() {
+        isPlaying = false; // Stop playback
+    }
+
+    public static void PlayMusic(){
         try{
             Sequencer sequencer = MidiSystem.getSequencer();
             sequencer.open();
@@ -21,15 +37,31 @@ public class MusicPlayer {
             sequencer.setSequence(sequence);
             sequencer.start();
 
-            while (sequencer.isRunning()) {
-                sleep(1000);
+            while(sequencer.isRunning()){
+                sleep(600)
             }
+
             sequencer.stop();
         }
         catch(Exception ex){
             //to be added
         }
     }
+
+    @Override
+    public void run() {
+        for (String soundFile : soundFiles) {
+            if (!isPlaying) {
+                break; // Exit if playback is stopped
+            }
+            playSound(soundFile);
+        }
+    }
+
+
+
+
+
 
     public static void main(String[] args){
         String inputText = "ao?oBPM+abcR+abcR+abcR-;abcBPM+abcoiu?";

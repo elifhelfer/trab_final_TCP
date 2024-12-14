@@ -6,7 +6,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 class FileReaderFromExplorer {
-    private static Path getFilePath() {
+
+    private Path filePath;
+
+    FileReaderFromExplorer(){
+        this.filePath = null;
+    }
+
+
+    private Path getFilePath() {
         JFileChooser fileChooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Text files", "txt");
         fileChooser.setFileFilter(filter);
@@ -26,10 +34,19 @@ class FileReaderFromExplorer {
         return null;
     }
 
-    public static String readFileFromExplorer() throws IOException {
-        Path filePath = getFilePath();
+    public String readFileFromExplorer() throws IOException {
+        this.filePath = getFilePath();
+        if(this.filePath == null){
+            System.out.println("oi");
+            return null;
+        }
+        return Files.readString(this.filePath);
+    }
 
-        return Files.readString(filePath);
+    public String getThisFilePath(){
+        if(this.filePath != null)
+            return this.filePath.toString();
+        return null;
     }
 }
 

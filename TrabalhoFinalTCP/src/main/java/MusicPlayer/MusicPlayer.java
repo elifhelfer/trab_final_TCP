@@ -10,6 +10,7 @@ import static java.lang.Thread.sleep;
 public class MusicPlayer implements Runnable{
     private boolean isPlaying;
     private Sequence song;
+    private Sequencer sequencer;
 
     public MusicPlayer(Sequence newSong){
         this.song = newSong;
@@ -17,49 +18,51 @@ public class MusicPlayer implements Runnable{
     }
 
     public void startPlaying() {
+        if (isPlaying){
+            return;
+        }
         isPlaying = true;
         new Thread(this).start(); // Start the thread
     }
 
     public void stopPlaying() {
         isPlaying = false; // Stop playback
+
+        if (sequencer != null && sequencer.isOpen()){
+            sequencer.stop();
+            sequencer.close();
+        }
     }
 
-    public static void PlayMusic(){
+    private void PlayMusic(){
         try{
-            Sequencer sequencer = MidiSystem.getSequencer();
+            sequencer = MidiSystem.getSequencer();
             sequencer.open();
-
-            // Set the BPM of the sequencer
             sequencer.setTempoInBPM(120);
+            sequencer.setSequence(song);
 
-            // Assign the sequence to the sequencer and start it
-            sequencer.setSequence(sequence);
             sequencer.start();
+            isPlaying = true;
 
             while(sequencer.isRunning()){
-                sleep(600)
+                sleep(600);
             }
-
-            sequencer.stop();
         }
         catch(Exception ex){
-            //to be added
+            ex.printStackTrace();
+        }
+        finally {
+            if (sequencer != null && sequencer.isOpen()) {
+                sequencer.close(); // Ensure resources are released
+            }
+            isPlaying = false; // Reset the flag
         }
     }
 
     @Override
     public void run() {
-        for (String soundFile : soundFiles) {
-            if (!isPlaying) {
-                break; // Exit if playback is stopped
-            }
-            playSound(soundFile);
-        }
+        PlayMusic();
     }
-
-
-
 
 
 
@@ -83,7 +86,10 @@ public class MusicPlayer implements Runnable{
                 track2.add(event);
             }
 
-            MusicPlayer.PlayMusic(sequence);
+            MusicPlayer musicPlayer = new MusicPlayer(sequence);
+            musicPlayer.startPlaying();
+            sleep(2000);
+            musicPlayer.stopPlaying();
 
         }catch(Exception ex){
             //nothing here yet

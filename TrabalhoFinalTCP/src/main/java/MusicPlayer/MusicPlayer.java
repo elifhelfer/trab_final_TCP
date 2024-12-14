@@ -1,11 +1,7 @@
 package MusicPlayer;
 
-import MusicMaker.MusicParser;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.sound.midi.*;
-import java.util.*;
-
-import static java.lang.Thread.sleep;
 
 public class MusicPlayer implements Runnable{
     private final AtomicBoolean isPlaying = new AtomicBoolean(false);
@@ -43,7 +39,7 @@ public class MusicPlayer implements Runnable{
 
             // Wait until the sequencer is running
             while (isPlaying.get() && sequencer.isRunning()) {
-                Thread.sleep(100); // Check every 100ms
+                Thread.sleep(500); // Check every 100ms
             }
         } catch (Exception ex) {
             ex.printStackTrace(); // Consider logging this instead
@@ -59,7 +55,6 @@ public class MusicPlayer implements Runnable{
     public void run() {
         playMusic();
     }
-
 }
 
 

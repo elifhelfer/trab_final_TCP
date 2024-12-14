@@ -1,4 +1,4 @@
-import MusicMaker.MusicParser;
+import MusicMaker.*;
 import javax.sound.midi.*;
 import java.util.*;
 
@@ -9,13 +9,10 @@ public class TESTE {
 
         //System.out.println("Enter the input text to play (e.g., R+ABCDEFG BPM+): ");
         //String inputText = in.nextLine();
-        String inputText = "ao?oBPM+abcR+abcR+abcR-;abcBPM+abcoiu?";
-        String inputText2 = "";
-        MusicParser parser = new MusicParser(1,160);
-        MusicParser parser2 = new MusicParser(2,60);
-        ArrayList<MidiEvent> midiEvents = parser.listMidiEvents(inputText);
-        ArrayList<MidiEvent> midiEvents2 = parser2.listMidiEvents(inputText2);
 
+        TrackData first_midi_seq = new TrackData("ab  c+cR+c#++++defgBPM+abc;\nabc-abcR+abcR-abc", 1, "PIANO");
+        ArrayList<MidiEvent> midi_list = MusicParser.listMidiEvents(first_midi_seq);
+        System.out.println(midi_list);
         try {
             // Get a Sequencer instance and open it
             Sequencer sequencer = MidiSystem.getSequencer();
@@ -24,15 +21,10 @@ public class TESTE {
             // Create a new Sequence with Pulse Per Tick (PPQ) set to 4
             Sequence sequence = new Sequence(Sequence.PPQ, 4);
             Track track = sequence.createTrack();
-            Track track2 = sequence.createTrack();
             // Add parsed MIDI events to the track
-            for (MidiEvent event : midiEvents) {
+            for (MidiEvent event : midi_list) {
                 track.add(event);
             }
-            for (MidiEvent event : midiEvents2) {
-                track2.add(event);
-            }
-
             // Set the BPM of the sequencer
             sequencer.setTempoInBPM(120);
 

@@ -2,11 +2,10 @@ import javax.sound.midi.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.Array;
 import java.util.*;
 
 import MusicConverter.MidiEventsToSequence;
-import MusicMaker.MusicParser;
+import MusicMaker.*;
 import MusicMaker.TrackData;
 import MusicPlayer.MusicPlayer;
 
@@ -27,6 +26,11 @@ public class Gui {
     private JButton uploadButton3;
     private JButton uploadButton4;
     private JButton saveButton;
+    private JTextArea drumsetBASSDRUMXTextArea;
+    private JTextField textFieldDuration1;
+    private JTextField textFieldDuration2;
+    private JTextField textFieldDuration3;
+    private JTextField textFieldDuration4;
 
     private Sequencer sequencer;
 
@@ -37,6 +41,7 @@ public class Gui {
         String[] instruments = {
                 "PIANO",
                 "GUITAR",
+                "ELECTRIC_GUITAR",
                 "VIOLIN",
                 "FLUTE",
                 "TRUMPET",
@@ -45,10 +50,14 @@ public class Gui {
                 "CLARINET",
                 "ORGAN"
         };
+        String[] instruments_drumset = {
+                "DRUMSET"
+        };
+
         comboBox1.setModel(new DefaultComboBoxModel<>(instruments));
         comboBox2.setModel(new DefaultComboBoxModel<>(instruments));
         comboBox3.setModel(new DefaultComboBoxModel<>(instruments));
-        comboBox4.setModel(new DefaultComboBoxModel<>(instruments));
+        comboBox4.setModel(new DefaultComboBoxModel<>(instruments_drumset));
 
         // Configura o botão Play
         playButton.addActionListener(new ActionListener() {
@@ -72,7 +81,7 @@ public class Gui {
         });
 
         // Configura o botão Save
-        playButton.addActionListener(new ActionListener() {
+        saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Save");
@@ -121,15 +130,20 @@ public class Gui {
             String inputText3 = textField3.getText();
             String inputText4 = textField4.getText();
 
+            int inputTextDuration1 = Integer.parseInt(textFieldDuration1.getText());
+            int inputTextDuration2 = Integer.parseInt(textFieldDuration2.getText());
+            int inputTextDuration3 = Integer.parseInt(textFieldDuration3.getText());
+            int inputTextDuration4 = Integer.parseInt(textFieldDuration4.getText());
+
             String intrument1 = comboBox1.getSelectedItem().toString();
             String intrument2 = comboBox2.getSelectedItem().toString();
             String intrument3 = comboBox3.getSelectedItem().toString();
             String intrument4 = comboBox4.getSelectedItem().toString();
 
-            TrackData trackdata1 = new TrackData(inputText1, 1, intrument1);
-            TrackData trackdata2 = new TrackData(inputText2, 2, intrument2);
-            TrackData trackdata3 = new TrackData(inputText3, 3, intrument3);
-            TrackData trackdata4 = new TrackData(inputText4, 4, intrument4);
+            TrackData trackdata1 = new TrackData(inputText1, 1, intrument1, inputTextDuration1);
+            TrackData trackdata2 = new TrackData(inputText2, 2, intrument2, inputTextDuration2);
+            TrackData trackdata3 = new TrackData(inputText3, 3, intrument3, inputTextDuration3);
+            TrackData trackdata4 = new TrackData(inputText4, MidiValues.PERCUSSION_CHANNEL, intrument4, inputTextDuration4); // Bateria
 
             midiEventsList.add(MusicParser.listMidiEvents(trackdata1));
             midiEventsList.add(MusicParser.listMidiEvents(trackdata2));

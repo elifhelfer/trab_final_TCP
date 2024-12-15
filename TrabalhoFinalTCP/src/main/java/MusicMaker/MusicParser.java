@@ -8,9 +8,13 @@ public class MusicParser {
     public static ArrayList<MidiEvent> listMidiEvents(TrackData track_info) {
         ArrayList<MidiEvent> midi_list = new ArrayList<>();
 
+        int default_instrument;
+
         // setting default values for bpm, instrument and volume :
-        int default_instrument = MidiValues.getInstrumentValue(track_info.getMidi_instrument(), false);
-        midi_list.add(MidiEvents.changeInstrument(0, track_info.getChannel(), default_instrument));
+        if (track_info.getChannel() != MidiValues.PERCUSSION_CHANNEL) {
+            default_instrument = MidiValues.getInstrumentValue(track_info.getMidi_instrument(), false);
+            midi_list.add(MidiEvents.changeInstrument(0, track_info.getChannel(), default_instrument));
+        }
         midi_list.add(MidiEvents.changeVolume(0, track_info.getChannel(), 0, MidiValues.DEFAULT_VOLUME, false));
 
         int tick = 4; // first note doesn't start right away to be correctly played
@@ -82,6 +86,7 @@ public class MusicParser {
             }
             else if (isPercussion(input_text, i) && track_info.getChannel() == MidiValues.PERCUSSION_CHANNEL) {
                 int percussion = MidiValues.getPercussionValue(input_text.substring(i,i+1), false);
+                System.out.println(percussion);
                 MidiEvents.addNoteEvent(midi_list,percussion,track_info.getChannel(), tick, track_info.getNote_duration());
                 tick += MidiValues.DEFAULT_TICK;
                 i++;

@@ -8,9 +8,9 @@ import java.util.Random;
 
 public class MidiEvents {
 
-    public static void addNoteEvent(ArrayList<MidiEvent> midiList, int note, int channel, int tick) {
+    public static void addNoteEvent(ArrayList<MidiEvent> midiList, int note, int channel, int tick, int note_duration) {
         MidiEvent noteOn = makeEvent(MidiValues.NOTE_ON, channel, note, tick); // 144 = NOTE_ON
-        MidiEvent noteOff = makeEvent(MidiValues.NOTE_OFF, channel, note, tick + MidiValues.NOTE_DURATION); // 128 = NOTE_OFF
+        MidiEvent noteOff = makeEvent(MidiValues.NOTE_OFF, channel, note, tick + note_duration); // 128 = NOTE_OFF
         midiList.add(noteOn);
         midiList.add(noteOff);
     }

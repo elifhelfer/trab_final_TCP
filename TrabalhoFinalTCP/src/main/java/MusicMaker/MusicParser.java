@@ -13,7 +13,7 @@ public class MusicParser {
         midi_list.add(MidiEvents.changeInstrument(0, track_info.getChannel(), default_instrument));
         midi_list.add(MidiEvents.changeVolume(0, track_info.getChannel(), 0, MidiValues.DEFAULT_VOLUME, false));
 
-        int tick = 4;
+        int tick = 4; // first note doesn't start right away to be correctly played
         int current_bpm = MidiValues.DEFAULT_BPM;
         int current_octave = 0;
         int current_note = -1;
@@ -36,13 +36,13 @@ public class MusicParser {
             }
             else if (isSharpNote(input_text, i)) {
                 current_note = MidiValues.getNoteValue(input_text.substring(i,i + "x#".length()), current_octave, false);
-                MidiEvents.addNoteEvent(midi_list,current_note,track_info.getChannel(), tick);
+                MidiEvents.addNoteEvent(midi_list,current_note,track_info.getChannel(), tick, track_info.getNote_duration());
                 tick += MidiValues.DEFAULT_TICK;
                 i += "x#".length();
             }
             else if (isNote(input_text, i)) {
                 current_note = MidiValues.getNoteValue(input_text.substring(i,i + "x".length()), current_octave, false);
-                MidiEvents.addNoteEvent(midi_list,current_note,track_info.getChannel(), tick);
+                MidiEvents.addNoteEvent(midi_list,current_note,track_info.getChannel(), tick, track_info.getNote_duration());
                 tick += MidiValues.DEFAULT_TICK;
                 i++;
             }
@@ -64,7 +64,7 @@ public class MusicParser {
             }
             else if (isRandomNote(input_text, i)) {
                 current_note = MidiValues.getNoteValue("",current_octave,true);
-                MidiEvents.addNoteEvent(midi_list,current_note,track_info.getChannel(), tick);
+                MidiEvents.addNoteEvent(midi_list,current_note,track_info.getChannel(), tick, track_info.getNote_duration());
                 tick += MidiValues.DEFAULT_TICK;
                 i++;
             }
@@ -75,8 +75,14 @@ public class MusicParser {
             }
             else if (isLastNote(input_text, i)) {
                 if (current_note != -1) {
-                    MidiEvents.addNoteEvent(midi_list,current_note,track_info.getChannel(), tick);
+                    MidiEvents.addNoteEvent(midi_list,current_note,track_info.getChannel(), tick, track_info.getNote_duration());
                 }
+                tick += MidiValues.DEFAULT_TICK;
+                i++;
+            }
+            else if (isPercussion(input_text, i) && track_info.getChannel() == MidiValues.PERCUSSION_CHANNEL) {
+                int percussion = MidiValues.getPercussionValue(input_text.substring(i,i+1), false);
+                MidiEvents.addNoteEvent(midi_list,percussion,track_info.getChannel(), tick, track_info.getNote_duration());
                 tick += MidiValues.DEFAULT_TICK;
                 i++;
             }
@@ -88,7 +94,6 @@ public class MusicParser {
                 i++;
             }
         }
-
         return midi_list;
     }
 
@@ -130,5 +135,8 @@ public class MusicParser {
 
     static boolean isLastNote(String input_text, int i) {
         return (i < input_text.length()) && "IUO".contains(input_text.substring(i, i + 1));
+    }
+    static boolean isPercussion(String input_text, int i) {
+        return (i < input_text.length()) && "XYZPQTV".contains(input_text.substring(i, i + 1));
     }
 }

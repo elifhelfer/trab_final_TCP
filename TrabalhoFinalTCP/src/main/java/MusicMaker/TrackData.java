@@ -2,11 +2,12 @@ package MusicMaker;
 
 public class TrackData {
     private final String input_text, midi_instrument;
-    private final int channel;
+    private final int channel, note_duration;
 
-    public TrackData(String input_text, int channel, String midi_instrument) {
+    public TrackData(String input_text, int channel, String midi_instrument, int note_duration) {
         this.input_text = input_text;
         this.channel = channel;
+        this.note_duration = note_duration;
         this.midi_instrument = midi_instrument;
     }
 
@@ -20,5 +21,9 @@ public class TrackData {
 
     public String getInput_text() {
         return this.input_text;
+    }
+
+    public int getNote_duration() {
+        return note_duration;
     }
 }

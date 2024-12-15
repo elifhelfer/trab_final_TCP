@@ -9,15 +9,15 @@ public class MidiValues {
     public static final int PROGRAM_CHANGE = 192; // Command for Program Change
     public static final int DEFAULT_BPM = 60;
     public static final int BPM_INCREASE = 80;
-    public static final int DEFAULT_VOLUME = 30;
+    public static final int DEFAULT_VOLUME = 100;
     public static final int MAX_VOLUME = 127;
     public static final int MIN_VOLUME = 0;
     public static final int DEFAULT_TICK = 4;
     public static final int OCTAVE_OFFSET = 12;
     public static final int HIGHEST_NOTE = 127;
     public static final int LOWEST_NOTE = 0;
-    public static final int VELOCITY = 100;
-    public static final int NOTE_DURATION = 2;
+    public static final int VELOCITY = 125;
+    public static final int NOTE_DURATION = 15;
 
     // HashMaps for Notes and Commands
     public static final Map<String, Integer> NOTE_MAP = new HashMap<>();

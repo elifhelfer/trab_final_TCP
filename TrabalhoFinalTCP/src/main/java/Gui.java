@@ -2,12 +2,15 @@ import javax.sound.midi.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.*;
 
 import MusicConverter.MidiEventsToSequence;
 import MusicMaker.*;
 import MusicMaker.TrackData;
 import MusicPlayer.MusicPlayer;
+
+import java.nio.file.*;
 
 public class Gui {
     private JPanel mainPanel;
@@ -31,6 +34,8 @@ public class Gui {
     private JTextField textFieldDuration2;
     private JTextField textFieldDuration3;
     private JTextField textFieldDuration4;
+
+    private final String FILE_SAVE_PATH = "./save/";
 
     private Sequencer sequencer;
 
@@ -64,7 +69,9 @@ public class Gui {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Play");
-                playMusic();
+                if(musicPlayer == null || !musicPlayer.getIsPlaying().get()) {
+                    playMusic();
+                }
             }
         });
 
@@ -72,11 +79,8 @@ public class Gui {
         pauseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                if (sequencer != null && sequencer.isRunning()) {
-//                    System.out.println("Pause");
-//                    sequencer.stop();
-//                }
-                musicPlayer.stopPlaying();
+                if((musicPlayer != null) && (musicPlayer.getIsPlaying().get()))
+                    musicPlayer.stopPlaying();
             }
         });
 
@@ -84,7 +88,25 @@ public class Gui {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //PUT ALL OF THIS IN A SEPARATE CLASS!!!! REFACTOR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                 System.out.println("Save");
+
+                Sequence sequence = getSequenceFromData();
+                Path save_dir_path = Paths.get(FILE_SAVE_PATH);
+                File save_file_path = new File(FILE_SAVE_PATH + "song");
+
+                try{
+                    if(!Files.exists(save_dir_path)){
+                        Files.createDirectories(save_dir_path);
+                        System.out.println("Directory created: " + save_dir_path);
+                    }
+                    MidiSystem.write(sequence,1,save_file_path);
+
+                    }catch(Exception ex) {
+                        ex.printStackTrace();
+                }
             }
         });
 
@@ -123,42 +145,46 @@ public class Gui {
 
     private void playMusic() {
         try {
-            ArrayList<ArrayList<MidiEvent>> midiEventsList = new ArrayList<>();
-
-            String inputText1 = textField1.getText();
-            String inputText2 = textField2.getText();
-            String inputText3 = textField3.getText();
-            String inputText4 = textField4.getText();
-
-            int inputTextDuration1 = Integer.parseInt(textFieldDuration1.getText());
-            int inputTextDuration2 = Integer.parseInt(textFieldDuration2.getText());
-            int inputTextDuration3 = Integer.parseInt(textFieldDuration3.getText());
-            int inputTextDuration4 = Integer.parseInt(textFieldDuration4.getText());
-
-            String intrument1 = comboBox1.getSelectedItem().toString();
-            String intrument2 = comboBox2.getSelectedItem().toString();
-            String intrument3 = comboBox3.getSelectedItem().toString();
-            String intrument4 = comboBox4.getSelectedItem().toString();
-
-            TrackData trackdata1 = new TrackData(inputText1, 1, intrument1, inputTextDuration1);
-            TrackData trackdata2 = new TrackData(inputText2, 2, intrument2, inputTextDuration2);
-            TrackData trackdata3 = new TrackData(inputText3, 3, intrument3, inputTextDuration3);
-            TrackData trackdata4 = new TrackData(inputText4, MidiValues.PERCUSSION_CHANNEL, intrument4, inputTextDuration4); // Bateria
-
-            midiEventsList.add(MusicParser.listMidiEvents(trackdata1));
-            midiEventsList.add(MusicParser.listMidiEvents(trackdata2));
-            midiEventsList.add(MusicParser.listMidiEvents(trackdata3));
-            midiEventsList.add(MusicParser.listMidiEvents(trackdata4));
-
-            Sequence sequence = MidiEventsToSequence.convert(midiEventsList);
-
+            Sequence sequence = getSequenceFromData();
             musicPlayer = new MusicPlayer(sequence);
-
             musicPlayer.startPlaying();
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private Sequence getSequenceFromData(){        //Gets info from all text boxes, converts them with the parser, and makes them into a sequence
+        ArrayList<ArrayList<MidiEvent>> midiEventsList = new ArrayList<>();
+
+        String inputText1 = textField1.getText();
+        String inputText2 = textField2.getText();
+        String inputText3 = textField3.getText();
+        String inputText4 = textField4.getText();
+
+        int inputTextDuration1 = Integer.parseInt(textFieldDuration1.getText());
+        int inputTextDuration2 = Integer.parseInt(textFieldDuration2.getText());
+        int inputTextDuration3 = Integer.parseInt(textFieldDuration3.getText());
+        int inputTextDuration4 = Integer.parseInt(textFieldDuration4.getText());
+
+        String intrument1 = comboBox1.getSelectedItem().toString();
+        String intrument2 = comboBox2.getSelectedItem().toString();
+        String intrument3 = comboBox3.getSelectedItem().toString();
+        String intrument4 = comboBox4.getSelectedItem().toString();
+
+        TrackData trackdata1 = new TrackData(inputText1, 1, intrument1, inputTextDuration1);
+        TrackData trackdata2 = new TrackData(inputText2, 2, intrument2, inputTextDuration2);
+        TrackData trackdata3 = new TrackData(inputText3, 3, intrument3, inputTextDuration3);
+        TrackData trackdata4 = new TrackData(inputText4, MidiValues.PERCUSSION_CHANNEL, intrument4, inputTextDuration4); // Bateria
+
+        midiEventsList.add(MusicParser.listMidiEvents(trackdata1));
+        midiEventsList.add(MusicParser.listMidiEvents(trackdata2));
+        midiEventsList.add(MusicParser.listMidiEvents(trackdata3));
+        midiEventsList.add(MusicParser.listMidiEvents(trackdata4));
+
+        Sequence sequence = MidiEventsToSequence.convert(midiEventsList);
+
+        return sequence;
     }
 
     public static void main(String[] args) {

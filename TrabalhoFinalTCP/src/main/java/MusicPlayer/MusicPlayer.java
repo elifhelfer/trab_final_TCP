@@ -12,6 +12,10 @@ public class MusicPlayer implements Runnable{
         this.song = newSong;
     }
 
+    public AtomicBoolean getIsPlaying(){
+        return this.isPlaying;
+    }
+
     public void startPlaying() {
         if (isPlaying.get()) {
             return; // Already playing

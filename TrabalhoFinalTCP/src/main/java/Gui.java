@@ -81,12 +81,8 @@ public class Gui {
         pauseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-<<<<<<< HEAD
-                musicPlayer.stopPlaying();
-=======
                 if((musicPlayer != null) && (musicPlayer.getIsPlaying().get()))
                     musicPlayer.stopPlaying();
->>>>>>> a166285ee6e7dd00516768faa8140ee1ef7fa72b
             }
         });
 
@@ -96,27 +92,25 @@ public class Gui {
             public void actionPerformed(ActionEvent e) {
                 //PUT ALL OF THIS IN A SEPARATE CLASS!!!! REFACTOR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
                 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
                 System.out.println("Save");
-<<<<<<< HEAD
-//                MidiSystem.write(sequence, 1, MIDI_FILE);
-=======
 
-                Sequence sequence = getSequenceFromData();
-                Path save_dir_path = Paths.get(FILE_SAVE_PATH);
-                File save_file_path = new File(FILE_SAVE_PATH + "song");
+                String fileName = textFieldSaveFile.getText();
 
-                try{
-                    if(!Files.exists(save_dir_path)){
-                        Files.createDirectories(save_dir_path);
-                        System.out.println("Directory created: " + save_dir_path);
-                    }
-                    MidiSystem.write(sequence,1,save_file_path);
+                if (!fileName.isEmpty()) {
+                    Sequence sequence = getSequenceFromData();
+                    Path save_dir_path = Paths.get(FILE_SAVE_PATH);
+                    File save_file_path = new File(FILE_SAVE_PATH + fileName + ".midi");
+                    try{
+                        if(!Files.exists(save_dir_path)){
+                            Files.createDirectories(save_dir_path);
+                            System.out.println("Directory created: " + save_dir_path);
+                        }
+                        MidiSystem.write(sequence,1,save_file_path);
 
                     }catch(Exception ex) {
                         ex.printStackTrace();
+                    }
                 }
->>>>>>> a166285ee6e7dd00516768faa8140ee1ef7fa72b
             }
         });
 
@@ -134,6 +128,7 @@ public class Gui {
                 }
             }
         });
+
         uploadButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -147,6 +142,7 @@ public class Gui {
                 }
             }
         });
+
         uploadButton3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -160,6 +156,7 @@ public class Gui {
                 }
             }
         });
+
         uploadButton4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

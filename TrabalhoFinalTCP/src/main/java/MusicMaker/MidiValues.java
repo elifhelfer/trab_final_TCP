@@ -9,7 +9,7 @@ public class MidiValues {
     public static final int DEFAULT_TICK = 4;
     public static final int PERCUSSION_CHANNEL= 9;
     public static final int OCTAVE_OFFSET = 12;
-    public static final int DEFAULT_VOLUME = 15;
+    public static final int DEFAULT_VOLUME = 60;
     public static final int DEFAULT_BPM = 60;
     public static final int BPM_INCREASE = 80;
     public static final int VELOCITY = 100;

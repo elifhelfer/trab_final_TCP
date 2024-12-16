@@ -8,6 +8,7 @@ import MusicConverter.MidiEventsToSequence;
 import MusicMaker.*;
 import MusicMaker.TrackData;
 import MusicPlayer.MusicPlayer;
+import FileReaderFromExplorer.FileReaderFromExplorer;
 
 public class Gui {
     private JPanel mainPanel;
@@ -31,6 +32,7 @@ public class Gui {
     private JTextField textFieldDuration2;
     private JTextField textFieldDuration3;
     private JTextField textFieldDuration4;
+    private JTextField textFieldSaveFile;
 
     private Sequencer sequencer;
 
@@ -68,14 +70,10 @@ public class Gui {
             }
         });
 
-        // Configura o botão Pause
+        // Configura o botão Stop
         pauseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                if (sequencer != null && sequencer.isRunning()) {
-//                    System.out.println("Pause");
-//                    sequencer.stop();
-//                }
                 musicPlayer.stopPlaying();
             }
         });
@@ -85,6 +83,7 @@ public class Gui {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Save");
+//                MidiSystem.write(sequence, 1, MIDI_FILE);
             }
         });
 
@@ -94,7 +93,8 @@ public class Gui {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Upload 1");
                 try {
-
+                    String inputFromExplorer = FileReaderFromExplorer.readFileFromExplorer();
+                    textField1.setText(inputFromExplorer);
                 }
                 catch (Exception ex) {
 
@@ -105,18 +105,39 @@ public class Gui {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Upload 2");
+                try {
+                    String inputFromExplorer = FileReaderFromExplorer.readFileFromExplorer();
+                    textField2.setText(inputFromExplorer);
+                }
+                catch (Exception ex) {
+
+                }
             }
         });
         uploadButton3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Upload 3");
+                try {
+                    String inputFromExplorer = FileReaderFromExplorer.readFileFromExplorer();
+                    textField3.setText(inputFromExplorer);
+                }
+                catch (Exception ex) {
+
+                }
             }
         });
         uploadButton4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Upload 4");
+                try {
+                    String inputFromExplorer = FileReaderFromExplorer.readFileFromExplorer();
+                    textField4.setText(inputFromExplorer);
+                }
+                catch (Exception ex) {
+
+                }
             }
         });
     }

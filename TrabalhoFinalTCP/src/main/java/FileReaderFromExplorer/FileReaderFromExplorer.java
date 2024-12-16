@@ -1,3 +1,5 @@
+package FileReaderFromExplorer;
+
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -5,16 +7,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-class FileReaderFromExplorer {
+public class FileReaderFromExplorer {
 
-    private Path filePath;
-
-    FileReaderFromExplorer(){
-        this.filePath = null;
-    }
-
-
-    private Path getFilePath() {
+    private static Path getFilePath() {
         JFileChooser fileChooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Text files", "txt");
         fileChooser.setFileFilter(filter);
@@ -34,19 +29,13 @@ class FileReaderFromExplorer {
         return null;
     }
 
-    public String readFileFromExplorer() throws IOException {
-        this.filePath = getFilePath();
-        if(this.filePath == null){
-            System.out.println("oi");
+    public static String readFileFromExplorer() throws IOException {
+        Path filePath = getFilePath();
+        if(filePath == null){
+            System.out.println("File path is null");
             return null;
         }
-        return Files.readString(this.filePath);
-    }
-
-    public String getThisFilePath(){
-        if(this.filePath != null)
-            return this.filePath.toString();
-        return null;
+        return Files.readString(filePath);
     }
 }
 

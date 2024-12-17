@@ -9,7 +9,7 @@ import MusicConverter.MidiEventsToSequence;
 import MusicMaker.*;
 import MusicMaker.TrackData;
 import MusicPlayer.MusicPlayer;
-import FileReaderFromExplorer.FileReaderFromExplorer;
+import MusicFile.FileReaderFromExplorer;
 
 import java.nio.file.*;
 

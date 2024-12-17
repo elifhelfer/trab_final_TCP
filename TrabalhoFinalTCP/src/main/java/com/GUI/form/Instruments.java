@@ -1,8 +1,9 @@
 package com.GUI.form;
 
+import MusicFile.FileReaderFromExplorer;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,12 +25,21 @@ public class Instruments extends JPanel {
             "SAXOPHONE",
             "CELLO",
             "CLARINET",
-            "ORGAN"
+            "ORGAN",
+            "DRUMSET"
     };
 
     public Instruments() {}
 
     public Instruments(int x, int y) {
+        setPanelAndElements();
+        setInstruments();
+        setInstrumentBox();
+
+        handleActions();
+
+    }
+    private void setPanelAndElements(){
         // Initialize components
         this.InstrumentBox = new JTextArea();
         this.currentInstrument = new JComboBox<>();
@@ -45,6 +55,7 @@ public class Instruments extends JPanel {
         this.noteDuration = new JTextField();
         this.noteDurationLabel = new JLabel();
         this.noteDurationLabel.setText("Note Duration:");
+        this.noteDuration.setText("40");
 
         // Set bounds for components
         this.currentInstrument.setBounds(20, 25, 150, 25); // ComboBox with all instruments
@@ -66,11 +77,6 @@ public class Instruments extends JPanel {
         InstrumentPanel.setBorder(new LineBorder(Color.black, 3, true));
         this.add(InstrumentPanel);
         this.setSize(800, 100);
-        setInstruments();
-        setInstrumentBox();
-
-        handleActions();
-
     }
 
     private void setInstruments(){
@@ -81,26 +87,39 @@ public class Instruments extends JPanel {
 
     private void setInstrumentBox(){
         InstrumentBox.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.ORANGE),
+                BorderFactory.createLineBorder(new Color(94, 91, 91)),
                 BorderFactory.createEmptyBorder(2, 2, 0, 0) // Top, left, bottom, right padding
         ));
         InstrumentBox.setLineWrap(true);
         InstrumentBox.setWrapStyleWord(true);
     }
 
-    void handleActions(){
+    private void handleActions(){
         uploadButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Upload");
                 try {
-
+                    String inputFromExplorer = FileReaderFromExplorer.readFileFromExplorer();
+                    InstrumentBox.setText(inputFromExplorer);
                 }
                 catch (Exception ex) {
-
+                    System.out.println("Error: " + ex.getMessage());
                 }
             }
         });
+
     }
 
+    public String getInstrumentBox(){
+        return InstrumentBox.getText();
+    }
+
+    public int getNoteDuration(){
+        return Integer.parseInt(noteDuration.getText());
+    }
+
+    public String getCurrentInstrument(){
+        return currentInstrument.getSelectedItem().toString();
+    }
 }

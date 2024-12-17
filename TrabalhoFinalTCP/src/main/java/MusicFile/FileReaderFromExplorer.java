@@ -1,4 +1,4 @@
-package FileReaderFromExplorer;
+package MusicFile;
 
 import java.io.File;
 import javax.swing.JFileChooser;

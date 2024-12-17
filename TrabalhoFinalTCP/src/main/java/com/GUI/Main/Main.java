@@ -48,6 +48,10 @@ public class Main extends javax.swing.JFrame {
 
     private final String FILE_SAVE_PATH = "./save/";
 
+    private final int NUMBEROFINSTRUMENTS = 5;
+    private final int WINDOWWIDTH = 1463;
+    private final int WINDOWHEIGHT = 900;
+
     public Main() {
         initExtras(); // inits the font
         initFrame(); //
@@ -77,17 +81,17 @@ public class Main extends javax.swing.JFrame {
     void initFrame(){
         frame = new JFrame();
         frame.setTitle("MUSGA");
-        frame.setSize(1463,900);
+        frame.setSize(WINDOWWIDTH,WINDOWHEIGHT);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
     }
     void initMainPanel(){
         MainPanel = new Panel();
         MainPanel.setLayout(null);
-        MainPanel.setPreferredSize(new Dimension(1463, 1500));
+        MainPanel.setPreferredSize(new Dimension(WINDOWWIDTH, WINDOWHEIGHT*2));
         title = new JLabel();
         title.setText("Musga!");
-        title.setBounds(400, 0, 1463, 310);
+        title.setBounds(400, 0, WINDOWWIDTH, 310);
         customFont = customFont.deriveFont(Font.PLAIN, 144);
         title.setFont(this.customFont);
         title.setForeground(new Color(15, 29, 64));
@@ -136,8 +140,8 @@ public class Main extends javax.swing.JFrame {
         MainPanel.add(dotMidi);
     }
     void initInstruments(){
-        Instrument = new Instruments[5];
-        for(int i = 0; i < 5 ; i++){
+        Instrument = new Instruments[NUMBEROFINSTRUMENTS];
+        for(int i = 0; i < NUMBEROFINSTRUMENTS ; i++){
             Instrument[i] = new Instruments(10, 30);
             Instrument[i].setBounds(50,200 + i*180,840,150);
             MainPanel.add(Instrument[i]);

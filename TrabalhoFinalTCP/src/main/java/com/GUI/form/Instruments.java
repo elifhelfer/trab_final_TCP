@@ -59,7 +59,7 @@ public class Instruments extends JPanel {
 
         // Set bounds for components
         this.currentInstrument.setBounds(20, 25, 150, 25); // ComboBox with all instruments
-        this.InstrumentBox.setBounds(20, 50, 800, 200); // TextBox
+        this.InstrumentBox.setBounds(20, 50, 800, 80); // TextBox
         this.uploadButton.setBounds(200, 25, 100, 25);
         this.noteDuration.setBounds(460, 25, 150, 25);
         this.noteDurationLabel.setBounds(360, 25, 150, 25);
@@ -73,15 +73,16 @@ public class Instruments extends JPanel {
 
         // Set size and add InstrumentPanel to Instruments
         this.setLayout(null);
-        InstrumentPanel.setBounds(0, 0, 840, 300);
-        InstrumentPanel.setBorder(new LineBorder(Color.black, 3, true));
+        InstrumentPanel.setBounds(0, 0, 840, 150);
+        InstrumentPanel.setBorder(new LineBorder(Color.lightGray   , 2, true));
+        InstrumentPanel.setBackground(new Color(240, 245, 250));
         this.add(InstrumentPanel);
         this.setSize(800, 100);
     }
 
     private void setInstruments(){
         currentInstrument.setModel(new DefaultComboBoxModel<>(instruments));
-        currentInstrument.setBackground(new Color(254, 138, 128, 160));
+        currentInstrument.setBackground(new Color(181, 212, 244, 255));
         currentInstrument.setFont(new Font("sansserif", Font.BOLD, 12));
     }
 

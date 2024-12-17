@@ -22,6 +22,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.awt.event.FocusListener;
+import java.awt.event.FocusEvent;
 
 public class Main extends javax.swing.JFrame {
     private Font customFont;
@@ -34,7 +36,8 @@ public class Main extends javax.swing.JFrame {
     private JButton playButton;
     private JButton stopButton;
     private JButton saveButton;
-    private JTextArea saveFileName;
+    private JTextField saveFileName;
+    private JLabel dotMidi;
 
     private JPanel drumsetRules; // Panel contendo informacoes sobre o uso de drumset
     private JLabel drumsetTitle;
@@ -50,6 +53,7 @@ public class Main extends javax.swing.JFrame {
         initFrame(); //
         initMainPanel();
         initInstruments();
+        initDrumsetRules();
         initScrollPane();
         initButtons();
 
@@ -80,13 +84,13 @@ public class Main extends javax.swing.JFrame {
     void initMainPanel(){
         MainPanel = new Panel();
         MainPanel.setLayout(null);
-        MainPanel.setPreferredSize(new Dimension(1463, 3500));
+        MainPanel.setPreferredSize(new Dimension(1463, 1500));
         title = new JLabel();
         title.setText("Musga!");
         title.setBounds(400, 0, 1463, 310);
         customFont = customFont.deriveFont(Font.PLAIN, 144);
         title.setFont(this.customFont);
-        title.setForeground(new Color(0, 0, 0));
+        title.setForeground(new Color(15, 29, 64));
         MainPanel.add(title);
     }
     void initButtons(){
@@ -102,22 +106,68 @@ public class Main extends javax.swing.JFrame {
         saveButton.setText("Save");
         saveButton.setBounds(900,340,150,50);
 
-        saveFileName = new JTextArea();
-        saveFileName.setText("Enter Filename");
+        saveFileName = new JTextField();
         saveFileName.setBounds(900, 400, 150, 20);
+
+        saveFileName.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (saveFileName.getText().equals("Enter file:")) {
+                    saveFileName.setText("");  // Clear the placeholder text
+                    saveFileName.setForeground(Color.BLACK);  // Change text color to black when user starts typing
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (saveFileName.getText().isEmpty()) {
+                    saveFileName.setText("Enter file:");  // Set placeholder text if nothing is entered
+                    saveFileName.setForeground(Color.GRAY);  // Change text color back to gray
+                }
+            }
+        });
+        dotMidi = new JLabel(".midi");
+        dotMidi.setBounds(1050, 400, 100, 20);
 
         MainPanel.add(saveFileName);
         MainPanel.add(playButton);
         MainPanel.add(stopButton);
         MainPanel.add(saveButton);
+        MainPanel.add(dotMidi);
     }
     void initInstruments(){
-        Instrument = new Instruments[10];
-        for(int i = 0; i < 10 ; i++){
+        Instrument = new Instruments[5];
+        for(int i = 0; i < 5 ; i++){
             Instrument[i] = new Instruments(10, 30);
-            Instrument[i].setBounds(50,200 + i*300,840,300);
+            Instrument[i].setBounds(50,200 + i*180,840,150);
             MainPanel.add(Instrument[i]);
         }
+    }
+    void initDrumsetRules(){
+        drumsetRules = new JPanel();
+        drumsetRules.setLayout(null);
+        drumsetRules.setBounds(1100,200,300,300);
+        drumsetRules.setBackground(new Color(240, 245, 250));
+        drumsetRules.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(94, 91, 91)),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10) // Top, left, bottom, right padding
+        ));
+
+        drumsetTitle = new JLabel();
+        drumsetTitle.setText("Drumset Rules");
+        drumsetTitle.setFont(new Font("Arial", Font.BOLD, 40));
+        int titleWidth = drumsetTitle.getPreferredSize().width;
+        drumsetTitle.setBounds((drumsetRules.getWidth() - titleWidth) / 2, 20, titleWidth, 30); // Center the title
+
+        drumsetDescription = new JLabel("<html>BASS DRUM - X<br>SNARE - Y<br>HI HAT CLOSED - Z" +
+                                             "<br> HI HAT OPEN - P<br> TOM LOW - Q<br>CRASH CYMBAL - T<br>" +
+                                            "RIDE CYMBAL - V</html>");
+        drumsetDescription.setFont(new Font("Arial", Font.PLAIN, 16)); // Set font size
+        int descriptionWidth = drumsetDescription.getPreferredSize().width;
+        drumsetDescription.setBounds((drumsetRules.getWidth() - descriptionWidth) / 2, 70, descriptionWidth, 160); // Center below title
+        drumsetRules.add(drumsetTitle);
+        drumsetRules.add(drumsetDescription);
+        MainPanel.add(drumsetRules);
     }
     void initScrollPane(){
         scrollPlane = new JScrollPane(MainPanel);
@@ -133,8 +183,8 @@ public class Main extends javax.swing.JFrame {
         verticalBar.setUI(new BasicScrollBarUI() {
             @Override
             protected void configureScrollBarColors() {
-                this.thumbColor = new Color(228, 164, 135); // Thumb color
-                this.trackColor = new Color(205, 248, 182);        // Track color
+                this.thumbColor = new Color(216, 236, 232); // Thumb color
+                this.trackColor = new Color(90, 124, 172);        // Track color
             }
 
             @Override
@@ -156,7 +206,6 @@ public class Main extends javax.swing.JFrame {
             }
         });
     }
-
 
     void handleActions(){
         playButton.addActionListener(new ActionListener() {

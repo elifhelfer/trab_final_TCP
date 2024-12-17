@@ -4,12 +4,16 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.text.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Instruments extends JPanel {
     private JTextArea InstrumentBox;
     private JComboBox currentInstrument;
     private JPanel InstrumentPanel;
-
+    private JButton uploadButton;
+    private JTextField noteDuration;
+    private JLabel noteDurationLabel;
 
     String[] instruments = {
             "PIANO",
@@ -37,22 +41,36 @@ public class Instruments extends JPanel {
         InstrumentPanel = new JPanel();
         InstrumentPanel.setLayout(null);
 
+        this.uploadButton = new JButton("Upload");
+        this.noteDuration = new JTextField();
+        this.noteDurationLabel = new JLabel();
+        this.noteDurationLabel.setText("Note Duration:");
+
         // Set bounds for components
-        this.currentInstrument.setBounds(90, 25, 150, 25);
-        this.InstrumentBox.setBounds(20, 50, 300, 150);
+        this.currentInstrument.setBounds(20, 25, 150, 25); // ComboBox with all instruments
+        this.InstrumentBox.setBounds(20, 50, 800, 200); // TextBox
+        this.uploadButton.setBounds(200, 25, 100, 25);
+        this.noteDuration.setBounds(460, 25, 150, 25);
+        this.noteDurationLabel.setBounds(360, 25, 150, 25);
 
         // Add components to the panel
         this.add(currentInstrument);
         this.add(InstrumentBox);
+        this.add(noteDuration);
+        this.add(noteDurationLabel);
+        this.add(uploadButton);
 
         // Set size and add InstrumentPanel to Instruments
         this.setLayout(null);
-        InstrumentPanel.setBounds(0, 0, 340, 300);
+        InstrumentPanel.setBounds(0, 0, 840, 300);
         InstrumentPanel.setBorder(new LineBorder(Color.black, 3, true));
         this.add(InstrumentPanel);
-        this.setSize(200, 100);
+        this.setSize(800, 100);
         setInstruments();
         setInstrumentBox();
+
+        handleActions();
+
     }
 
     private void setInstruments(){
@@ -68,6 +86,21 @@ public class Instruments extends JPanel {
         ));
         InstrumentBox.setLineWrap(true);
         InstrumentBox.setWrapStyleWord(true);
+    }
+
+    void handleActions(){
+        uploadButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Upload");
+                try {
+
+                }
+                catch (Exception ex) {
+
+                }
+            }
+        });
     }
 
 }

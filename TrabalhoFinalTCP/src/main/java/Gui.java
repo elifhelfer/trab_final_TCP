@@ -124,7 +124,7 @@ public class Gui {
                     textField1.setText(inputFromExplorer);
                 }
                 catch (Exception ex) {
-
+                    System.out.println("Error: " + ex.getMessage());
                 }
             }
         });
@@ -138,7 +138,7 @@ public class Gui {
                     textField2.setText(inputFromExplorer);
                 }
                 catch (Exception ex) {
-
+                    System.out.println("Error: " + ex.getMessage());
                 }
             }
         });
@@ -152,7 +152,7 @@ public class Gui {
                     textField3.setText(inputFromExplorer);
                 }
                 catch (Exception ex) {
-
+                    System.out.println("Error: " + ex.getMessage());
                 }
             }
         });
@@ -166,7 +166,7 @@ public class Gui {
                     textField4.setText(inputFromExplorer);
                 }
                 catch (Exception ex) {
-
+                    System.out.println("Error: " + ex.getMessage());
                 }
             }
         });
@@ -183,33 +183,18 @@ public class Gui {
         }
     }
 
+    private static void addToMidiEventsList(ArrayList<ArrayList<MidiEvent>> midiEventsList, String inputText, int channel, int inputTextDuration, String instrument){
+        TrackData trackdata = new TrackData(inputText, channel, instrument, inputTextDuration);
+        midiEventsList.add(MusicParser.listMidiEvents(trackdata));
+    }
+
     private Sequence getSequenceFromData(){        //Gets info from all text boxes, converts them with the parser, and makes them into a sequence
         ArrayList<ArrayList<MidiEvent>> midiEventsList = new ArrayList<>();
 
-        String inputText1 = textField1.getText();
-        String inputText2 = textField2.getText();
-        String inputText3 = textField3.getText();
-        String inputText4 = textField4.getText();
-
-        int inputTextDuration1 = Integer.parseInt(textFieldDuration1.getText());
-        int inputTextDuration2 = Integer.parseInt(textFieldDuration2.getText());
-        int inputTextDuration3 = Integer.parseInt(textFieldDuration3.getText());
-        int inputTextDuration4 = Integer.parseInt(textFieldDuration4.getText());
-
-        String intrument1 = comboBox1.getSelectedItem().toString();
-        String intrument2 = comboBox2.getSelectedItem().toString();
-        String intrument3 = comboBox3.getSelectedItem().toString();
-        String intrument4 = comboBox4.getSelectedItem().toString();
-
-        TrackData trackdata1 = new TrackData(inputText1, 1, intrument1, inputTextDuration1);
-        TrackData trackdata2 = new TrackData(inputText2, 2, intrument2, inputTextDuration2);
-        TrackData trackdata3 = new TrackData(inputText3, 3, intrument3, inputTextDuration3);
-        TrackData trackdata4 = new TrackData(inputText4, MidiValues.PERCUSSION_CHANNEL, intrument4, inputTextDuration4); // Bateria
-
-        midiEventsList.add(MusicParser.listMidiEvents(trackdata1));
-        midiEventsList.add(MusicParser.listMidiEvents(trackdata2));
-        midiEventsList.add(MusicParser.listMidiEvents(trackdata3));
-        midiEventsList.add(MusicParser.listMidiEvents(trackdata4));
+        Gui.addToMidiEventsList(midiEventsList, textField1.getText(), 1, Integer.parseInt(textFieldDuration1.getText()), comboBox1.getSelectedItem().toString());
+        Gui.addToMidiEventsList(midiEventsList, textField2.getText(), 2, Integer.parseInt(textFieldDuration2.getText()), comboBox2.getSelectedItem().toString());
+        Gui.addToMidiEventsList(midiEventsList, textField3.getText(), 3, Integer.parseInt(textFieldDuration3.getText()), comboBox3.getSelectedItem().toString());
+        Gui.addToMidiEventsList(midiEventsList, textField4.getText(), MidiValues.PERCUSSION_CHANNEL, Integer.parseInt(textFieldDuration4.getText()), comboBox4.getSelectedItem().toString());
 
         Sequence sequence = MidiEventsToSequence.convert(midiEventsList);
 

@@ -3,19 +3,11 @@ package MusicMaker;
 import javax.sound.midi.MetaMessage;
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.ShortMessage;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 public class MidiEvents {
 
-    public static void addNoteEvent(ArrayList<MidiEvent> midiList, int note, int channel, int tick, int note_duration) {
-        MidiEvent noteOn = makeEvent(MidiValues.NOTE_ON, channel, note, tick); // 144 = NOTE_ON
-        MidiEvent noteOff = makeEvent(MidiValues.NOTE_OFF, channel, note, tick + note_duration); // 128 = NOTE_OFF
-        midiList.add(noteOn);
-        midiList.add(noteOff);
-    }
-
-    public static MidiEvent makeEvent(int command, int channel, int note, int tick) {
+    private static MidiEvent makeEvent(int command, int channel, int note, int tick) {
         MidiEvent event = null;
         try {
             ShortMessage message = new ShortMessage();
@@ -27,47 +19,49 @@ public class MidiEvents {
         return event;
     }
 
-    public static MidiEvent changeBpm(int tick, int incrementBpm, int currentBpm) {
-        int newBpm = currentBpm + incrementBpm;
-        int mpq = 60000000 / newBpm;
+    public static void addNoteEvent(ArrayList<MidiEvent> midiList, TrackData track_info, ParserState state) {
+        MidiEvent noteOn = makeEvent(MidiValues.NOTE_ON, track_info.getChannel(), state.getNote(), state.getTick());
+        MidiEvent noteOff = makeEvent(MidiValues.NOTE_OFF, track_info.getChannel(), state.getNote(), state.getTick() + track_info.getNote_duration()); // 128 = NOTE_OFF
+        midiList.add(noteOn);
+        midiList.add(noteOff);
+    }
+
+    public static MidiEvent changeBpm(ParserState state) {
+        int mpq = 60000000 / state.getBpm();
         byte[] data = {(byte) (mpq >> 16), (byte) (mpq >> 8), (byte) mpq};
         MetaMessage tempoChange = new MetaMessage();
         MidiEvent event = null;
         try {
             tempoChange.setMessage(0x51, data, data.length);
-            event = new MidiEvent(tempoChange, tick);
+            event = new MidiEvent(tempoChange, state.getTick());
         } catch (Exception ex) {
             // TODO catch exception
         }
         return event;
     }
 
-    public static int getRandomBPM() {
-        Random rand = new Random();
-        return rand.nextInt(181) + 60; // Random BPM between 60 and 240
-    }
-
-    public static MidiEvent changeVolume(int tick, int channel, int currentVolume, int default_volume, boolean doubleVolume) {
-        int newVolume = doubleVolume ? Math.min(currentVolume * 2, MidiValues.MAX_VOLUME) : default_volume;
+    public static MidiEvent changeVolume(ParserState state, TrackData track_info, int default_volume, boolean doubleVolume) {
+        int newVolume = doubleVolume ? Math.min(state.getVolume() * 2, MidiValues.MAX_VOLUME) : default_volume;
+        state.setVolume(newVolume);
         MidiEvent event = null;
         try {
             ShortMessage volumeChange = new ShortMessage();
-            volumeChange.setMessage(MidiValues.CONTROL_CHANGE + channel, 7, newVolume);
-            event = new MidiEvent(volumeChange, tick);
+            volumeChange.setMessage(MidiValues.CONTROL_CHANGE + track_info.getChannel(), 7, newVolume);
+            event = new MidiEvent(volumeChange, state.getTick());
         } catch (Exception ex) {
             // TODO catch exception
         }
         return event;
     }
 
-    public static MidiEvent changeInstrument(int tick, int channel ,int instrument) {
+    public static MidiEvent changeInstrument(ParserState state, TrackData track_info) {
         MidiEvent event = null;
         try {
             ShortMessage programChange = new ShortMessage();
-            programChange.setMessage(MidiValues.PROGRAM_CHANGE, channel, instrument, 0); // 192 = Program Change
-            event = new MidiEvent(programChange, tick);
+            programChange.setMessage(MidiValues.PROGRAM_CHANGE, track_info.getChannel(), state.getInstrument(), 0); // 192 = Program Change
+            event = new MidiEvent(programChange, state.getTick());
         } catch (Exception ex) {
-            // TODO implement
+            // TODO implement exception
         }
         return event;
     }

@@ -2,9 +2,18 @@ package MusicMaker;
 import java.util.*;
 
 public class MidiValues {
-    // Constants for MIDI
-    public static final int LOWEST_NOTE = 0;
+
+    public static final int MIN_OCTAVE = -5;
+    public static final int INVALID_NOTE = -1;
+    public static final int DEFAULT_OCTAVE = 0;
+    public static final int MIN_BPM = 0;
+    public static final int START_TICK = 0;
     public static final int MIN_VOLUME = 0;
+    public static final int DEFAULT_INSTRUMENT = 0;
+    public static final int LEN1 = 1;
+    public static final int LEN2 = 2;
+    public static final int LEN4 = 4;
+    public static final int MAX_OCTAVE = 6;
     public static final int DEFAULT_NOTE_DURATION = 2; // in ticks
     public static final int DEFAULT_TICK = 4;
     public static final int PERCUSSION_CHANNEL= 9;
@@ -14,12 +23,10 @@ public class MidiValues {
     public static final int BPM_INCREASE = 80;
     public static final int VELOCITY = 100;
     public static final int MAX_VOLUME = 127;
-    public static final int HIGHEST_NOTE = 127;
     public static final int NOTE_OFF = 128;   // Command for Note Off
     public static final int NOTE_ON = 144;    // Command for Note On
     public static final int CONTROL_CHANGE = 176; // Command for Control Change
     public static final int PROGRAM_CHANGE = 192; // Command for Program Change
-
     // HashMaps for Notes and Commands
     public static final Map<String, Integer> NOTE_MAP = new HashMap<>();
     public static final Map<String, Integer> INSTRUMENT_MAP = new HashMap<>();
@@ -43,7 +50,7 @@ public class MidiValues {
 
         INSTRUMENT_MAP.put("PIANO", 1);
         INSTRUMENT_MAP.put("GUITAR", 25);
-        INSTRUMENT_MAP.put("ELECTRIC_GUITAR", 26);
+        INSTRUMENT_MAP.put("ELECTRIC GUITAR", 26);
         INSTRUMENT_MAP.put("VIOLIN", 40);
         INSTRUMENT_MAP.put("FLUTE", 74);
         INSTRUMENT_MAP.put("TRUMPET", 56);
@@ -55,13 +62,6 @@ public class MidiValues {
         INSTRUMENT_MAP.put("XYLOPHONE", 96);
 
         // Initializing percussion instruments with their General MIDI values
-        PERCUSSION_MAP.put("BASS DRUM - X", 35);  // Acoustic Bass Drum
-        PERCUSSION_MAP.put("SNARE - Y", 38);      // Acoustic Snare Drum
-        PERCUSSION_MAP.put("HI HAT CLOSED - Z", 42); // Closed Hi-Hat
-        PERCUSSION_MAP.put("HI HAT OPEN - P", 46);   // Open Hi-Hat
-        PERCUSSION_MAP.put("TOM LOW - Q", 41);    // Low Floor Tom
-        PERCUSSION_MAP.put("CRASH CYMBAL - T", 49); // Crash Cymbal
-        PERCUSSION_MAP.put("RIDE CYMBAL - V", 51);  // Ride Cymbal
         PERCUSSION_MAP.put("X", 35); // Bass Drum
         PERCUSSION_MAP.put("Y", 38); // Snare Drum
         PERCUSSION_MAP.put("Z", 42); // Hi-Hat Closed
@@ -72,13 +72,13 @@ public class MidiValues {
     }
 
     // Method to get MIDI value for a note
-    public static int getNoteValue(String note_str, int current_octave,boolean random) {
+    public static int getNoteValue(String note_str, boolean random) {
         if (random) {
             Random rand = new Random();
             int randomIndex = rand.nextInt(NOTE_MAP.size());
-            return (current_octave * OCTAVE_OFFSET) + (int) NOTE_MAP.values().toArray()[randomIndex];
+            return (int) NOTE_MAP.values().toArray()[randomIndex];
         }
-        return (current_octave * OCTAVE_OFFSET) + NOTE_MAP.get(note_str.toUpperCase());
+        return NOTE_MAP.get(note_str.toUpperCase());
     }
 
     // Method to get random instrument value
@@ -99,7 +99,4 @@ public class MidiValues {
         }
         return PERCUSSION_MAP.get(percussion.toUpperCase());
     }
-
-
 }
-
